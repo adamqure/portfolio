@@ -1,0 +1,125 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Adam Ure · Principal engineer & mobile architect",
+  description = "Adam Ure helps teams ship quality software, predictably. Principal engineer and mobile architect available for contract work, speaking, and mentorship.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={Astro.site} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&family=JetBrains+Mono&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    /* Apace brand palette (used as Adam's personal visual system) */
+    --bg: #0b1f33; /* Apace Ink */
+    --surface: #102b44; /* raised ink */
+    --border: #1d3d57;
+    --fg: #eaf1f8; /* near-white */
+    --muted: #8ea6bd; /* slate */
+    --accent: #2d6bff; /* Signal Blue (lead) */
+    --teal: #15c2a3; /* Velocity Teal (accent) */
+    --amber: #ffb020; /* Signal Amber (rare) */
+    --maxw: 78rem;
+    --font-display: "Poppins", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Lato", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+    font-family: var(--font-body);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Solid ink on html AND body so the overscroll / rubber-band region (which only
+     ever paints a solid color, never a gradient) always matches the page. */
+  html {
+    color: var(--fg);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background: var(--bg);
+  }
+
+  body {
+    margin: 0;
+    position: relative;
+    background: var(--bg);
+    overflow-x: hidden;
+  }
+
+  /* Glow + dot grid as an in-flow element behind the content. Because it scrolls
+     with the page, the overscroll bounce just slides it away and reveals matching
+     ink — no clipped gradient edge. */
+  .page-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    /* Glow anchored ~440px from the top (behind the phone body) and fully faded to
+       ink before the top edge, so the page's top edge is pure ink — matching the
+       solid-ink overscroll/rubber-band region with no brightness step. */
+    background-image:
+      radial-gradient(
+        1000px 700px at 88% 440px,
+        rgba(45, 107, 255, 0.22),
+        transparent 52%
+      ),
+      radial-gradient(circle at 1px 1px, rgba(141, 166, 189, 0.06) 1px, transparent 0);
+    background-size: auto, 24px 24px;
+    background-repeat: no-repeat, repeat;
+  }
+
+  main {
+    /* fluid: fills the screen up to --maxw, with a consistent gutter */
+    position: relative;
+    z-index: 1;
+    width: min(var(--maxw), 100% - 3rem);
+    margin-inline: auto;
+    padding: 3.5rem 0 5rem;
+  }
+
+  a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+</style>
