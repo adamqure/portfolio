@@ -60,7 +60,7 @@ def footer():
         f'        <li><a href="{url}" aria-label="{label}" title="{label}"'
         f'{" class=\"todo\"" if todo else ""} target="_blank" rel="noopener noreferrer">{icon}</a></li>'
         for label, url, icon, todo in SOCIAL)
-    return f"""  <footer class="site-footer">
+    return f"""  <footer class="site-footer" id="footer">
     <div class="wrap">
       <p class="muted" style="margin:0">&copy; 2026 {NAME} &middot; {TITLE}</p>
       <ul class="social">
@@ -263,7 +263,7 @@ def project(p):
             ("Deliverables", p["deliverables"]), ("Skills", tags(p["skills"])), ("Tools", tags(p["tools"])),
             ("Completed", p["date"])]
     facts = "\n".join(f"            <dt>{k}</dt><dd>{v}</dd>" for k, v in rows)
-    return f"""      <article class="project{" todo" if p.get("todo") else ""}">
+    return f"""      <article class="project{" todo" if p.get("todo") else ""}" id="{p["org"].lower().replace(" ", "-")}">
         <div class="project-visual">{p["visual"]}</div>
         <div>
           <span class="eyebrow">{p["org"]}</span>
@@ -285,7 +285,7 @@ portfolio = f"""    <section class="section">
       </div>
     </section>"""
 
-contact = f"""    <section class="section">
+contact = f"""    <section class="section" id="contact">
       <div class="wrap contact-grid">
         <div>
           <span class="eyebrow">Contact</span>
