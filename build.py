@@ -11,6 +11,7 @@ TITLE = "Software Engineer for Connected Devices"
 EMAIL = "adamqure@icloud.com"
 CITY = "Atlanta, GA"
 FORM_ENDPOINT = "https://formspree.io/f/mrpprqoz"
+BOOKING_URL = "https://cal.com/adamure/30min"
 
 # One profile description, reused on the About page and (shortened) on the resume,
 # LinkedIn and Upwork, as the rubric requires. Paste-ready copies live in profile.md.
@@ -83,7 +84,7 @@ def page(filename, label, description, body):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=3">
 </head>
 <body>
 {header(label)}
@@ -293,6 +294,11 @@ contact = f"""    <section class="section" id="contact">
           <p class="lead">Tell me about your device, your timeline and what&rsquo;s getting in the way of shipping. I&rsquo;ll reply within two business days.</p>
           <p><span class="eyebrow" style="margin-bottom:.4rem">Email</span>
             <a href="mailto:{EMAIL}" style="font:600 1.25rem var(--font-display)">{EMAIL}</a></p>
+          <div class="booking">
+            <span class="eyebrow" style="margin-bottom:.4rem">Book a call</span>
+            <p class="muted" style="margin:0 0 1rem">Prefer to talk it through? Grab a free 30-minute intro call.</p>
+            <a class="btn btn-primary" href="{BOOKING_URL}" target="_blank" rel="noopener noreferrer">Book a 30-min call</a>
+          </div>
         </div>
         <form class="card" action="{FORM_ENDPOINT}" method="POST">
           <input type="hidden" name="_subject" value="New inquiry from adamure.com">
