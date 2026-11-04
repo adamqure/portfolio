@@ -83,7 +83,7 @@ def page(filename, label, description, body):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
 {header(label)}
@@ -177,8 +177,8 @@ about = f"""    <section class="section">
       <div class="wrap">
         <span class="eyebrow">Resume</span>
         <h2>Experience, education &amp; skills</h2>
-        <iframe class="resume-frame" src="resume.pdf#view=FitH&amp;toolbar=0" title="{NAME} resume (PDF)"></iframe>
-        <p class="muted" style="margin-top:1rem">Can&rsquo;t see it? <a href="resume.pdf" target="_blank">Open the resume PDF</a>.</p>
+        <a href="resume.pdf" target="_blank"><img class="resume-img" src="images/resume.png?v=2" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112"></a>
+        <p class="muted" style="margin-top:1rem"><a href="resume.pdf" target="_blank">Download the resume (PDF)</a></p>
       </div>
     </section>"""
 
@@ -389,6 +389,10 @@ p.summary {{ margin: 0; }}
     subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
                     "--virtual-time-budget=5000", f"--print-to-pdf={SITE / 'resume.pdf'}",
                     (out / "resume.html").as_uri()], check=True, capture_output=True)
+    subprocess.run([chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=816,1056",
+                    "--force-device-scale-factor=2", "--virtual-time-budget=5000",
+                    f"--screenshot={SITE / 'images' / 'resume.png'}", (out / "resume.html").as_uri()],
+                   check=True, capture_output=True)
 
 
 FAVICON = LOGO.replace(' aria-hidden="true"', ' xmlns="http://www.w3.org/2000/svg"')
