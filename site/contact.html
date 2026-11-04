@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | Adam Ure</title>
+  <meta name="description" content="Contact Adam Ure about your connected-device project.">
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="#102b44"/>
+<rect x="0.5" y="0.5" width="39" height="39" rx="9.5" fill="none" stroke="#15c2a3" stroke-opacity=".5"/>
+<text x="20" y="26" text-anchor="middle" font-family="Poppins, sans-serif" font-weight="700" font-size="15" fill="#15c2a3">AU</text></svg><span>Adam Ure</span></a>
+      <nav aria-label="Main"><ul class="nav">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+      </ul></nav>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <div class="wrap contact-grid">
+        <div>
+          <span class="eyebrow">Contact</span>
+          <h1 style="font-size:clamp(2rem,4vw,3rem)">Let&rsquo;s build something that connects</h1>
+          <p class="lead">Tell me about your device, your timeline and what&rsquo;s getting in the way of shipping. I&rsquo;ll reply within two business days.</p>
+          <p><span class="eyebrow" style="margin-bottom:.4rem">Email</span>
+            <a href="mailto:adamqure@icloud.com" style="font:600 1.25rem var(--font-display)">adamqure@icloud.com</a></p>
+        </div>
+        <form class="card" action="https://formspree.io/f/mrpprqoz" method="POST">
+          <input type="hidden" name="_subject" value="New inquiry from adamure.com">
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <label>Name <input type="text" name="name" autocomplete="name" required></label>
+          <label>Email <input type="email" name="email" autocomplete="email" required></label>
+          <label>Message <textarea name="message" required></textarea></label>
+          <button class="btn btn-primary" type="submit">Send message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p class="muted" style="margin:0">&copy; 2026 Adam Ure &middot; Software Engineer for Connected Devices</p>
+      <ul class="social">
+        <li><a href="https://github.com/adamqure" aria-label="GitHub" title="GitHub" target="_blank" rel="noopener noreferrer"><img src="https://cdn.simpleicons.org/github/8ea6bd" alt="" width="20" height="20"></a></li>
+        <li><a href="https://www.linkedin.com/in/adamqure" aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="9" width="4" height="12" rx="1"/><circle cx="5" cy="5" r="2.2"/>
+<path d="M10 9h3.8v1.8C14.5 9.6 15.9 8.7 18 8.7c3 0 4 2 4 5V21h-4v-6.5c0-1.6-.5-2.6-1.9-2.6-1.5 0-2.1 1.1-2.1 2.6V21h-4z"/></svg></a></li>
+        <li><a href="https://www.upwork.com/freelancers/~015585d132264ee962" aria-label="Upwork" title="Upwork" target="_blank" rel="noopener noreferrer"><img src="https://cdn.simpleicons.org/upwork/8ea6bd" alt="" width="20" height="20"></a></li>
+      </ul>
+    </div>
+  </footer>
+</body>
+</html>
