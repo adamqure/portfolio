@@ -84,7 +84,7 @@ def page(filename, label, description, body):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 {header(label)}
@@ -220,6 +220,7 @@ VIS_SNIFR = visual("Diagram: an e-nose sensor pairs with the app, which turns re
 
 PROJECTS = [
     dict(name="A Wi-Fi e-nose for gut health tracking", org="Snifr", visual=VIS_SNIFR,
+         shots=[("snifr-1.jpg", "Snifr app: FloraScore and weekly trend"), ("snifr-2.jpg", "Snifr app: consistency and duration analysis")],
          link="https://www.snifr.ai", link_label="Visit snifr.ai",
          goal="Help people managing IBS, food sensitivities or elimination diets stop guessing about their gut health, with real answers they can bring to a doctor.",
          role="Founding Engineer. I own the software that connects the e-nose to its users, from bringing the sensor online over Wi-Fi to the app and the AI insights built on its data.",
@@ -229,8 +230,9 @@ PROJECTS = [
          tools=["Kotlin Multiplatform", "AWS", "Python (ML)", "Server-side Swift"],
          date="Ongoing Project"),
     dict(name="Securing mobile-to-device Bluetooth", org="Monovo", visual=VIS_MONOVO,
+         shots=[("monovo-2.jpg", "Monovo app: blood pressure monitor connection status"), ("monovo-3.jpg", "Monovo app: guided measurement help")],
          link="https://apps.apple.com/us/app/monovo/id1508030721", link_label="View on the App Store",
-         goal="Give a connected hardware product a mobile app that communicates with the device securely and reliably, on both iOS and Android.",
+         goal="Give patients a remote vitals-monitoring app that connects securely and reliably to at-home devices such as a blood pressure monitor, on both iOS and Android.",
          role="Mobile Experience Architect. I built the iOS app from scratch, set mobile strategy across iOS and Android, co-invented the Bluetooth security framework with the hardware engineers, and later led the backend and web teams too.",
          approach="Designed security into the device link from the start: a multi-tier framework that layers protection on mobile-to-device communication. Established UI patterns, testing practices and engineering standards so both platforms stayed consistent as the product grew.",
          deliverables="Production iOS app, cross-platform mobile architecture, patented multi-tier Bluetooth security framework (U.S. Patent No. 12,652,273), and end-to-end systems across mobile, backend and web.",
@@ -264,8 +266,14 @@ def project(p):
             ("Deliverables", p["deliverables"]), ("Skills", tags(p["skills"])), ("Tools", tags(p["tools"])),
             ("Completed", p["date"])]
     facts = "\n".join(f"            <dt>{k}</dt><dd>{v}</dd>" for k, v in rows)
+    shots = p.get("shots", [])
+    shots_html = ('          <div class="shots">' + "".join(
+        f'<img src="images/projects/{f}" alt="{alt}" loading="lazy" width="450" height="800">' for f, alt in shots)
+        + "</div>\n") if shots else ""
     return f"""      <article class="project{" todo" if p.get("todo") else ""}" id="{p["org"].lower().replace(" ", "-")}">
-        <div class="project-visual">{p["visual"]}</div>
+        <div class="project-media">
+{shots_html}          <div class="project-visual">{p["visual"]}</div>
+        </div>
         <div>
           <span class="eyebrow">{p["org"]}</span>
           <h2>{p["name"]}</h2>
