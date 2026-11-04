@@ -167,10 +167,18 @@ about = f"""    <section class="section">
             <li>Bluetooth LE</li><li>Device sync</li><li>OTA updates</li><li>TDD</li><li>Software architecture</li><li>CI/CD</li><li>Regulated software</li><li>Mentorship</li>
           </ul>
           <div class="btn-row">
-            <a class="btn btn-primary" href="resume.pdf" target="_blank">View my resume</a>
+            <a class="btn btn-primary" href="#resume">View my resume</a>
             <a class="btn btn-ghost" href="contact.html">Get in touch</a>
           </div>
         </div>
+      </div>
+    </section>
+    <section class="section" id="resume" style="padding-top:0">
+      <div class="wrap">
+        <span class="eyebrow">Resume</span>
+        <h2>Experience, education &amp; skills</h2>
+        <iframe class="resume-frame" src="resume.pdf#view=FitH&amp;toolbar=0" title="{NAME} resume (PDF)"></iframe>
+        <p class="muted" style="margin-top:1rem">Can&rsquo;t see it? <a href="resume.pdf" target="_blank">Open the resume PDF</a>.</p>
       </div>
     </section>"""
 
@@ -364,7 +372,7 @@ p.summary {{ margin: 0; }}
 <div class="contact"><a href="mailto:{EMAIL}">{EMAIL}</a><br><a href="https://adamure.com">adamure.com</a><br>
 <a href="https://www.linkedin.com/in/adamqure">linkedin.com/in/adamqure</a><br>{CITY}</div></header>
 <main>
-<h2>Profile</h2><p class="summary">{PROFILE_SHORT}</p>
+<h2>About me</h2><p class="summary">{PROFILE_SHORT}</p>
 <h2>Core strengths</h2><ul class="strengths">{strengths}</ul>
 <h2>Experience</h2>
 {exp}
