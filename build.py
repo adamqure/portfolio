@@ -9,7 +9,7 @@ NAME = "Adam Ure"
 TITLE = "Software Engineer for Connected Devices"
 
 EMAIL = "adamqure@icloud.com"
-CITY = "Atlanta, GA"
+CITY = "Atlanta metro area"
 FORM_ENDPOINT = "https://formspree.io/f/mrpprqoz"
 BOOKING_URL = "https://cal.com/adamure/30min"
 
@@ -178,7 +178,7 @@ about = f"""    <section class="section">
       <div class="wrap">
         <span class="eyebrow">Resume</span>
         <h2>Experience, education &amp; skills</h2>
-        <a href="resume.pdf" target="_blank"><img class="resume-img" src="images/resume.png?v=2" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112"></a>
+        <a href="resume.pdf" target="_blank"><img class="resume-img" src="images/resume.png?v=3" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112"></a>
         <p class="muted" style="margin-top:1rem"><a href="resume.pdf" target="_blank">Download the resume (PDF)</a></p>
       </div>
     </section>"""
