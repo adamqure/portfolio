@@ -106,6 +106,7 @@ def person_ld():
         "@type": "Person", "@id": PERSON_ID, "name": NAME, "jobTitle": TITLE, "url": SITE_URL + "/",
         "image": f"{SITE_URL}/images/portrait.jpg", "description": plain(PROFILE_SHORT),
         "email": f"mailto:{EMAIL}", "sameAs": SAME_AS, "knowsAbout": KNOWS_ABOUT,
+        "knowsLanguage": ["English", "Mandarin Chinese"],
         "address": {"@type": "PostalAddress", "addressLocality": "Atlanta", "addressRegion": "GA", "addressCountry": "US"},
         "worksFor": {"@type": "Organization", "name": "Snifr", "url": "https://www.snifr.ai"},
         "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Maryville University"},
@@ -234,7 +235,8 @@ FAQ = [
      "I co-invented a patented multi-tier Bluetooth security framework for mobile-to-device communication (U.S. Patent No. "
      "12,652,273), and I test against simulated devices so pairing, reconnect and sync failures show up in CI, not in the field."),
     ("Where are you based?",
-     "The Atlanta metro area in Georgia, USA. I&rsquo;m available for remote freelance work with teams anywhere."),
+     "The Atlanta metro area in Georgia, USA. I&rsquo;m available for remote freelance work with teams anywhere, and I also "
+     "work in Mandarin, including technical specs and communication with manufacturers."),
 ]
 
 home = f"""    <section class="hero">
@@ -590,7 +592,7 @@ Sitemap: {SITE_URL}/sitemap.xml
     faq = "\n\n".join(f"### {plain(q)}\n{plain(a)}" for q, a in FAQ)
     (SITE / "llms.txt").write_text(f"""# {NAME}
 
-> {plain(PROFILE_SHORT)} Based in the {CITY}, Georgia, USA; available for remote freelance work.
+> {plain(PROFILE_SHORT)} Based in the {CITY}, Georgia, USA; available for remote freelance work. Works in English and Mandarin, including technical specs and communication with manufacturers.
 
 ## Hire or contact
 - Email: {EMAIL}

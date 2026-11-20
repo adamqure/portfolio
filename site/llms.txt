@@ -1,6 +1,6 @@
 # Adam Ure
 
-> Software engineer for connected devices. I help hardware teams ship software that pairs reliably, syncs accurately and updates safely. Patented Bluetooth security co-inventor with six years leading mobile and platform work for consumer and regulated medical devices, built on TDD, clean architecture and predictable delivery. Based in the Atlanta metro area, Georgia, USA; available for remote freelance work.
+> Software engineer for connected devices. I help hardware teams ship software that pairs reliably, syncs accurately and updates safely. Patented Bluetooth security co-inventor with six years leading mobile and platform work for consumer and regulated medical devices, built on TDD, clean architecture and predictable delivery. Based in the Atlanta metro area, Georgia, USA; available for remote freelance work. Works in English and Mandarin, including technical specs and communication with manufacturers.
 
 ## Hire or contact
 - Email: adamqure@icloud.com
@@ -56,7 +56,7 @@ Swift, SwiftUI and UIKit on iOS; Kotlin Multiplatform, Android and Flutter; serv
 I co-invented a patented multi-tier Bluetooth security framework for mobile-to-device communication (U.S. Patent No. 12,652,273), and I test against simulated devices so pairing, reconnect and sync failures show up in CI, not in the field.
 
 ### Where are you based?
-The Atlanta metro area in Georgia, USA. I’m available for remote freelance work with teams anywhere.
+The Atlanta metro area in Georgia, USA. I’m available for remote freelance work with teams anywhere, and I also work in Mandarin, including technical specs and communication with manufacturers.
 
 ## Pages
 - [Home](https://adamure.com/): services and FAQ
