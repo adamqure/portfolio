@@ -1,0 +1,66 @@
+# Adam Ure
+
+> Software engineer for connected devices. I help hardware teams ship software that pairs reliably, syncs accurately and updates safely. Patented Bluetooth security co-inventor with six years leading mobile and platform work for consumer and regulated medical devices, built on TDD, clean architecture and predictable delivery. Based in the Atlanta metro area, Georgia, USA; available for remote freelance work.
+
+## Hire or contact
+- Email: adamqure@icloud.com
+- Book a free 30-minute intro call: https://cal.com/adamure/30min
+- Contact page: https://adamure.com/contact.html
+- Upwork: https://www.upwork.com/freelancers/~015585d132264ee962
+- LinkedIn: https://www.linkedin.com/in/adamqure
+- GitHub: https://github.com/adamqure
+
+## Good fit for
+Hardware and IoT teams building mobile apps, backends or platform software that must pair, sync and update reliably: Bluetooth LE devices, Wi-Fi-connected sensors, wearables, remote patient monitoring and regulated medical devices.
+
+## Services
+- **Device connectivity:** Bluetooth LE pairing, background sync and offline-first data that holds up in the real world, not just on the bench.
+- **Test-driven development:** Simulated devices and automated tests so you find protocol and sync bugs before your customers do.
+- **Architecture & delivery:** Release pipelines that keep app, firmware and cloud versions compatible, on a cadence you can plan around.
+- **Technical mentorship:** Coaching for engineers and teams who want to build quality in, rather than bolting it on afterward.
+
+## Selected work
+- [Snifr: A Wi-Fi e-nose for gut health tracking](https://adamure.com/portfolio.html#snifr) (Ongoing Project): A Wi-Fi-connected e-nose and companion app, daily AI insights and weekly FloraScore™ reports, now in beta.
+- [Monovo: Securing mobile-to-device Bluetooth](https://adamure.com/portfolio.html#monovo) (November 2021): Production iOS app, cross-platform mobile architecture, patented multi-tier Bluetooth security framework (U.S. Patent No. 12,652,273), and end-to-end systems across mobile, backend and web.
+- [Nevro: Compliance-critical features for a medical device](https://adamure.com/portfolio.html#nevro) (May 2025): Compliance-critical mobile releases, a localization and audit pipeline that reduced verification time by about 99.8%, and firmware design reviews.
+- [Myia Health: Unifying a remote-care platform](https://adamure.com/portfolio.html#myia-health) (January 2023): A unified cross-platform mobile architecture, telemedicine platform components, and team workflows that reduced post-release defects by about 15%.
+
+## Experience
+- Founding Engineer, Snifr (October 2025 – Present)
+- Principal Software Engineer, Stable Kernel (June 2025 – Present)
+- Engineering Team Lead, Nevro Corp (January 2023 – May 2025)
+- Lead Mobile Developer, Myia Health (March 2022 – January 2023)
+- Lead iOS Developer, Nike Valiant Labs (November 2021 – March 2022)
+- Mobile Experience Architect, Monovo (March 2020 – November 2021)
+
+## Education & certifications
+- M.S. Software Development, Maryville University
+- B.S. Computer Science, Brigham Young University
+- Claude Certified Architect – Foundations, Anthropic
+- Co-inventor, U.S. Patent No. 12,652,273 (multi-tier Bluetooth security framework for mobile-to-device communication)
+
+## FAQ
+### What kind of projects do you take on?
+Software for products that talk to hardware: Bluetooth LE pairing and background sync, Wi-Fi device provisioning, offline-first data, over-the-air firmware updates, and the mobile apps and backends around them. I’ve done this for consumer devices, wearables, remote patient monitoring and a regulated medical device platform.
+
+### How do engagements work?
+Fixed-scope milestones with a clear deliverable, from a one-week architecture review or Bluetooth audit to a full build. Most projects start with a free 30-minute intro call.
+
+### Do you have experience with regulated medical device software?
+Yes. At Nevro I led compliance-critical mobile features for a regulated medical device platform, served as independent reviewer on firmware projects, and built a localization and audit pipeline that cut verification time by about 99.8%.
+
+### Which platforms and languages do you work in?
+Swift, SwiftUI and UIKit on iOS; Kotlin Multiplatform, Android and Flutter; server-side Swift (Vapor) and Python on AWS; REST and GraphQL APIs. I work directly with firmware teams across the device and software boundary.
+
+### What makes your Bluetooth work different?
+I co-invented a patented multi-tier Bluetooth security framework for mobile-to-device communication (U.S. Patent No. 12,652,273), and I test against simulated devices so pairing, reconnect and sync failures show up in CI, not in the field.
+
+### Where are you based?
+The Atlanta metro area in Georgia, USA. I’m available for remote freelance work with teams anywhere.
+
+## Pages
+- [Home](https://adamure.com/): services and FAQ
+- [About](https://adamure.com/about.html): full bio and resume
+- [Portfolio](https://adamure.com/portfolio.html): case studies with goals, contribution, approach and deliverables
+- [Contact](https://adamure.com/contact.html): email, booking link and contact form
+- [Resume (PDF)](https://adamure.com/resume.pdf)

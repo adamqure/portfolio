@@ -2,9 +2,16 @@
 """Builds site/*.html from one shared header/footer so every page stays identical.
 Run:  python3 build.py
 Placeholders to replace before submitting are wrapped in class="todo" (dashed teal outline)."""
+import datetime
+import json
+import re
+import subprocess
 from pathlib import Path
 
 SITE = Path(__file__).parent / "site"
+SITE_URL = "https://adamure.com"
+CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+TODAY = datetime.date.today().isoformat()
 NAME = "Adam Ure"
 TITLE = "Software Engineer for Connected Devices"
 
@@ -71,8 +78,66 @@ def footer():
   </footer>"""
 
 
-def page(filename, label, description, body):
+def plain(s):
+    """HTML snippet -> plain text, for JSON-LD, llms.txt and meta tags."""
+    s = re.sub(r"<[^>]+>", "", s)
+    for ent, ch in (("&rsquo;", "’"), ("&lsquo;", "‘"), ("&ldquo;", "“"), ("&rdquo;", "”"),
+                    ("&amp;", "&"), ("&middot;", "·"), ("&nbsp;", " ")):
+        s = s.replace(ent, ch)
+    return s
+
+
+def url(filename):
+    return SITE_URL + "/" if filename == "index.html" else f"{SITE_URL}/{filename}"
+
+
+PERSON_ID = SITE_URL + "/#person"
+SERVICE_ID = SITE_URL + "/#service"
+SAME_AS = ["https://www.linkedin.com/in/adamqure", "https://github.com/adamqure",
+           "https://www.upwork.com/freelancers/~015585d132264ee962"]
+KNOWS_ABOUT = ["Bluetooth Low Energy", "Connected devices", "IoT", "Wearables", "Medical device software",
+               "Wi-Fi device provisioning", "Over-the-air (OTA) firmware updates", "Offline-first sync",
+               "iOS development", "Swift", "SwiftUI", "Kotlin Multiplatform", "Android", "Flutter",
+               "Test-driven development", "Clean architecture", "CI/CD", "Regulated software", "AWS"]
+
+
+def person_ld():
+    return {
+        "@type": "Person", "@id": PERSON_ID, "name": NAME, "jobTitle": TITLE, "url": SITE_URL + "/",
+        "image": f"{SITE_URL}/images/portrait.jpg", "description": plain(PROFILE_SHORT),
+        "email": f"mailto:{EMAIL}", "sameAs": SAME_AS, "knowsAbout": KNOWS_ABOUT,
+        "address": {"@type": "PostalAddress", "addressLocality": "Atlanta", "addressRegion": "GA", "addressCountry": "US"},
+        "worksFor": {"@type": "Organization", "name": "Snifr", "url": "https://www.snifr.ai"},
+        "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Maryville University"},
+                     {"@type": "CollegeOrUniversity", "name": "Brigham Young University"}],
+        "hasCredential": [
+            {"@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "M.S. Software Development"},
+            {"@type": "EducationalOccupationalCredential", "credentialCategory": "degree", "name": "B.S. Computer Science"},
+            {"@type": "EducationalOccupationalCredential", "credentialCategory": "certification",
+             "name": "Claude Certified Architect – Foundations", "recognizedBy": {"@type": "Organization", "name": "Anthropic"}}],
+    }
+
+
+def service_ld():
+    return {
+        "@type": "ProfessionalService", "@id": SERVICE_ID, "name": f"{NAME}, {TITLE}", "url": SITE_URL + "/",
+        "image": f"{SITE_URL}/images/og.png", "description": plain(PROFILE_SHORT), "founder": {"@id": PERSON_ID},
+        "email": EMAIL, "areaServed": "Worldwide",
+        "address": {"@type": "PostalAddress", "addressLocality": "Atlanta", "addressRegion": "GA", "addressCountry": "US"},
+        "knowsAbout": KNOWS_ABOUT, "sameAs": SAME_AS,
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Services", "itemListElement": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": plain(t), "description": plain(d)}}
+            for _, t, d in SERVICES]},
+    }
+
+
+def page(filename, label, description, body, schema=()):
     title = f"{NAME} | {TITLE}" if label == "Home" else f"{label} | {NAME}"
+    canonical = url(filename)
+    graph = [{"@type": "WebSite", "@id": SITE_URL + "/#website", "url": SITE_URL + "/", "name": NAME,
+              "description": f"{NAME}, {TITLE}", "publisher": {"@id": PERSON_ID}, "inLanguage": "en"},
+             person_ld(), *schema]
+    ld = json.dumps({"@context": "https://schema.org", "@graph": graph}, ensure_ascii=False, indent=1).replace("</", "<\\/")
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,11 +145,33 @@ def page(filename, label, description, body):
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{title}</title>
   <meta name="description" content="{description}">
+  <meta name="author" content="{NAME}">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="{canonical}">
+  <meta name="theme-color" content="#0b1f33">
+  <meta property="og:type" content="{"profile" if label == "About" else "website"}">
+  <meta property="og:site_name" content="{NAME}">
+  <meta property="og:title" content="{title}">
+  <meta property="og:description" content="{description}">
+  <meta property="og:url" content="{canonical}">
+  <meta property="og:image" content="{SITE_URL}/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{NAME}, {TITLE}">
+  <meta property="og:locale" content="en_US">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{title}">
+  <meta name="twitter:description" content="{description}">
+  <meta name="twitter:image" content="{SITE_URL}/images/og.png">
+  <link rel="alternate" type="text/markdown" href="/llms.txt" title="Site summary for AI assistants">
+  <script type="application/ld+json">
+{ld}
+  </script>
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 {header(label)}
@@ -129,6 +216,27 @@ SERVICES = [
     ("04 / GROW", "Technical mentorship", "Coaching for engineers and teams who want to build quality in, rather than bolting it on afterward."),
 ]
 
+FAQ = [
+    ("What kind of projects do you take on?",
+     "Software for products that talk to hardware: Bluetooth LE pairing and background sync, Wi-Fi device provisioning, "
+     "offline-first data, over-the-air firmware updates, and the mobile apps and backends around them. I&rsquo;ve done this "
+     "for consumer devices, wearables, remote patient monitoring and a regulated medical device platform."),
+    ("How do engagements work?",
+     f"Fixed-scope milestones with a clear deliverable, from a one-week architecture review or Bluetooth audit to a full build. "
+     f"Most projects start with a <a href=\"{BOOKING_URL}\">free 30-minute intro call</a>."),
+    ("Do you have experience with regulated medical device software?",
+     "Yes. At Nevro I led compliance-critical mobile features for a regulated medical device platform, served as independent "
+     "reviewer on firmware projects, and built a localization and audit pipeline that cut verification time by about 99.8%."),
+    ("Which platforms and languages do you work in?",
+     "Swift, SwiftUI and UIKit on iOS; Kotlin Multiplatform, Android and Flutter; server-side Swift (Vapor) and Python on AWS; "
+     "REST and GraphQL APIs. I work directly with firmware teams across the device and software boundary."),
+    ("What makes your Bluetooth work different?",
+     "I co-invented a patented multi-tier Bluetooth security framework for mobile-to-device communication (U.S. Patent No. "
+     "12,652,273), and I test against simulated devices so pairing, reconnect and sync failures show up in CI, not in the field."),
+    ("Where are you based?",
+     "The Atlanta metro area in Georgia, USA. I&rsquo;m available for remote freelance work with teams anywhere."),
+]
+
 home = f"""    <section class="hero">
       <div class="wrap">
         <div>
@@ -152,6 +260,15 @@ home = f"""    <section class="hero">
                  for n, t, d in SERVICES) + """
         </div>
       </div>
+    </section>
+    <section class="section" id="faq" style="padding-top:0">
+      <div class="wrap">
+        <span class="eyebrow">FAQ</span>
+        <h2>Working with a connected-device software engineer</h2>
+        <div class="faq">
+""" + "\n".join(f"""          <details><summary>{q}</summary><p>{a}</p></details>""" for q, a in FAQ) + """
+        </div>
+      </div>
     </section>"""
 
 about = f"""    <section class="section">
@@ -160,7 +277,7 @@ about = f"""    <section class="section">
         <div>
           <span class="eyebrow">About</span>
           <h1 style="font-size:clamp(2rem,4vw,3rem)">{NAME}</h1>
-          <p class="muted" style="font:600 1.1rem var(--font-display)">{TITLE}</p>
+          <p class="muted" style="font:600 1.1rem var(--font-display)">{TITLE} &middot; {CITY}, Georgia</p>
           <div>
 """ + "\n".join(f"            <p>{p}</p>" for p in PROFILE) + f"""
           </div>
@@ -178,8 +295,9 @@ about = f"""    <section class="section">
       <div class="wrap">
         <span class="eyebrow">Resume</span>
         <h2>Experience, education &amp; skills</h2>
-        <a href="resume.pdf" target="_blank"><img class="resume-img" src="images/resume.png?v=3" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112"></a>
+        <a href="resume.pdf" target="_blank"><picture><source srcset="images/resume.webp?v=4" type="image/webp"><img class="resume-img" src="images/resume.png?v=4" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112" loading="lazy"></picture></a>
         <p class="muted" style="margin-top:1rem"><a href="resume.pdf" target="_blank">Download the resume (PDF)</a></p>
+<!--RESUME_TEXT-->
       </div>
     </section>"""
 
@@ -300,6 +418,7 @@ contact = f"""    <section class="section" id="contact">
           <span class="eyebrow">Contact</span>
           <h1 style="font-size:clamp(2rem,4vw,3rem)">Let&rsquo;s build something that connects</h1>
           <p class="lead">Tell me about your device, your timeline and what&rsquo;s getting in the way of shipping. I&rsquo;ll reply within two business days.</p>
+          <p class="muted">Based in the {CITY}, Georgia, and available for remote freelance work.</p>
           <p><span class="eyebrow" style="margin-bottom:.4rem">Email</span>
             <a href="mailto:{EMAIL}" style="font:600 1.25rem var(--font-display)">{EMAIL}</a></p>
           <div class="booking">
@@ -355,6 +474,28 @@ STRENGTHS = [
 ]
 
 
+EDUCATION = [("Maryville University", "M.S. Software Development", "December 2023"),
+             ("Brigham Young University", "B.S. Computer Science", "April 2020"),
+             ("Anthropic", "Claude Certified Architect – Foundations", "")]
+
+
+def resume_text():
+    """The resume as real HTML text, so search engines and AI crawlers can read what the image shows."""
+    jobs = "\n".join(f"""          <h4>{role}, {org} <span class="muted">({when})</span></h4>
+          <ul>{"".join(f"<li>{b}</li>" for b in bullets)}</ul>""" for org, role, when, bullets in EXPERIENCE)
+    strengths = "".join(f"<li><b>{k}:</b> {v}</li>" for k, v in STRENGTHS)
+    edu = "".join(f"<li>{what}, {where}{f' ({when})' if when else ''}</li>" for where, what, when in EDUCATION)
+    return f"""        <details class="resume-text">
+          <summary>Read the resume as text</summary>
+          <h3>Core strengths</h3>
+          <ul>{strengths}</ul>
+          <h3>Experience</h3>
+{jobs}
+          <h3>Education &amp; certifications</h3>
+          <ul>{edu}</ul>
+        </details>"""
+
+
 def build_resume():
     exp = "\n".join(f"""  <div class="job"><div class="job-head"><h3>{org} <span>— {role}</span></h3><time>{when}</time></div>
     <ul>{"".join(f"<li>{b}</li>" for b in bullets)}</ul></div>""" for org, role, when, bullets in EXPERIENCE)
@@ -391,33 +532,144 @@ p.summary {{ margin: 0; }}
 <h2>Experience</h2>
 {exp}
 <h2>Education &amp; certifications</h2>
-<div class="edu"><div><span><b>Maryville University</b> — M.S. Software Development</span><time>December 2023</time></div>
-<div><span><b>Brigham Young University</b> — B.S. Computer Science</span><time>April 2020</time></div>
-<div><span><b>Anthropic</b> — Claude Certified Architect – Foundations</span><time></time></div></div>
+<div class="edu">{"".join(f'<div><span><b>{where}</b> — {what}</span><time>{when}</time></div>' for where, what, when in EDUCATION)}</div>
 </main></body></html>"""
     out = Path(__file__).parent / "resume"
     out.mkdir(exist_ok=True)
     (out / "resume.html").write_text(html)
-    chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-    import subprocess
-    subprocess.run([chrome, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
+    subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",
                     "--virtual-time-budget=5000", f"--print-to-pdf={SITE / 'resume.pdf'}",
                     (out / "resume.html").as_uri()], check=True, capture_output=True)
-    subprocess.run([chrome, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=816,1056",
+    png = SITE / "images" / "resume.png"
+    subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=816,1056",
                     "--force-device-scale-factor=2", "--virtual-time-budget=5000",
-                    f"--screenshot={SITE / 'images' / 'resume.png'}", (out / "resume.html").as_uri()],
+                    f"--screenshot={png}", (out / "resume.html").as_uri()],
+                   check=True, capture_output=True)
+    subprocess.run(["cwebp", "-quiet", "-q", "70", str(png), "-o", str(png.with_suffix(".webp"))], check=True)
+
+
+def build_og_image():
+    """1200x630 social share card (LinkedIn, Slack, iMessage, X)."""
+    html = f"""<!DOCTYPE html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>body{{margin:0;width:1200px;height:630px;background:#0b1f33;color:#eaf1f8;font-family:Poppins,sans-serif;
+display:flex;flex-direction:column;justify-content:center;padding:0 90px;box-sizing:border-box;
+background-image:radial-gradient(circle at 92% 15%,rgba(21,194,163,.22),transparent 45%)}}
+.top{{display:flex;align-items:center;gap:22px;margin-bottom:56px}} .top svg{{width:84px;height:84px}}
+.top span{{font:700 40px Poppins}} h1{{font:700 84px/1.02 Poppins;margin:0 0 28px;letter-spacing:-.02em}}
+h1 b{{color:#15c2a3}} p{{font:500 26px "JetBrains Mono",monospace;color:#8ea6bd;margin:0}}</style></head><body>
+<div class="top">{LOGO}<span>{NAME}</span></div>
+<h1>Ship quality.<br><b>Predictably.</b></h1>
+<p>{TITLE.upper()} &middot; ADAMURE.COM</p></body></html>"""
+    tmp = Path(__file__).parent / "resume" / "og.html"
+    tmp.write_text(html)
+    subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=1200,630",
+                    "--virtual-time-budget=5000", f"--screenshot={SITE / 'images' / 'og.png'}", tmp.as_uri()],
                    check=True, capture_output=True)
 
 
+def build_crawler_files():
+    (SITE / "robots.txt").write_text(f"""# Search engines and AI assistants are welcome to read and cite this site.
+User-agent: *
+Allow: /
+
+Sitemap: {SITE_URL}/sitemap.xml
+""")
+    urls = "\n".join(f"  <url><loc>{url(f)}</loc><lastmod>{TODAY}</lastmod></url>" for f, _ in PAGES)
+    (SITE / "sitemap.xml").write_text(f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{urls}
+  <url><loc>{SITE_URL}/resume.pdf</loc><lastmod>{TODAY}</lastmod></url>
+</urlset>
+""")
+    services = "\n".join(f"- **{plain(t)}:** {plain(d)}" for _, t, d in SERVICES)
+    projects = "\n".join(
+        f"- [{plain(p['org'])}: {plain(p['name'])}]({url('portfolio.html')}#{p['org'].lower().replace(' ', '-')}) "
+        f"({plain(p['date'])}): {plain(p['deliverables'])}" for p in PROJECTS)
+    jobs = "\n".join(f"- {plain(role)}, {org} ({when})" for org, role, when, _ in EXPERIENCE)
+    faq = "\n\n".join(f"### {plain(q)}\n{plain(a)}" for q, a in FAQ)
+    (SITE / "llms.txt").write_text(f"""# {NAME}
+
+> {plain(PROFILE_SHORT)} Based in the {CITY}, Georgia, USA; available for remote freelance work.
+
+## Hire or contact
+- Email: {EMAIL}
+- Book a free 30-minute intro call: {BOOKING_URL}
+- Contact page: {url('contact.html')}
+- Upwork: {SAME_AS[2]}
+- LinkedIn: {SAME_AS[0]}
+- GitHub: {SAME_AS[1]}
+
+## Good fit for
+Hardware and IoT teams building mobile apps, backends or platform software that must pair, sync and update reliably: Bluetooth LE devices, Wi-Fi-connected sensors, wearables, remote patient monitoring and regulated medical devices.
+
+## Services
+{services}
+
+## Selected work
+{projects}
+
+## Experience
+{jobs}
+
+## Education & certifications
+{chr(10).join(f"- {what}, {where}" for where, what, _ in EDUCATION)}
+- Co-inventor, U.S. Patent No. 12,652,273 (multi-tier Bluetooth security framework for mobile-to-device communication)
+
+## FAQ
+{faq}
+
+## Pages
+- [Home]({url('index.html')}): services and FAQ
+- [About]({url('about.html')}): full bio and resume
+- [Portfolio]({url('portfolio.html')}): case studies with goals, contribution, approach and deliverables
+- [Contact]({url('contact.html')}): email, booking link and contact form
+- [Resume (PDF)]({SITE_URL}/resume.pdf)
+""")
+
+
 FAVICON = LOGO.replace(' aria-hidden="true"', ' xmlns="http://www.w3.org/2000/svg"')
+
+
+def portfolio_ld():
+    return [{"@type": "ItemList", "name": f"Selected work by {NAME}", "itemListElement": [
+        {"@type": "ListItem", "position": i, "item": {
+            "@type": "CreativeWork", "name": plain(p["name"]), "url": f"{url('portfolio.html')}#{p['org'].lower().replace(' ', '-')}",
+            "description": plain(p["goal"]), "abstract": plain(p["deliverables"]), "creator": {"@id": PERSON_ID},
+            "sourceOrganization": {"@type": "Organization", "name": p["org"], "url": p["link"]},
+            "keywords": ", ".join(plain(x) for x in p["skills"] + p["tools"]),
+            **({} if p["date"].startswith("Ongoing") else {"dateCreated": datetime.datetime.strptime(p["date"], "%B %Y").strftime("%Y-%m")}),
+            **({"creativeWorkStatus": "In progress"} if p["date"].startswith("Ongoing") else {})}}
+        for i, p in enumerate(PROJECTS, 1)]}]
+
+
+def faq_ld():
+    return [{"@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": plain(q), "acceptedAnswer": {"@type": "Answer", "text": plain(a)}} for q, a in FAQ]}]
+
 
 if __name__ == "__main__":
     (SITE / "images").mkdir(parents=True, exist_ok=True)
     (SITE / "images" / "favicon.svg").write_text(FAVICON)
     (SITE / "CNAME").write_text("adamure.com\n")
-    page("index.html", "Home", f"{NAME}, {TITLE}. I help hardware teams ship software that pairs reliably, syncs accurately and updates safely.", home)
-    page("about.html", "About", f"About {NAME}, {TITLE}.", about)
-    page("portfolio.html", "Portfolio", f"Connected-device projects by {NAME}.", portfolio)
-    page("contact.html", "Contact", f"Contact {NAME} about your connected-device project.", contact)
+    page("index.html", "Home",
+         f"{NAME}, freelance software engineer for connected devices in Atlanta. Bluetooth LE, wearables and medical "
+         f"device software that pairs, syncs and updates reliably.",
+         home, [service_ld(), *faq_ld()])
+    page("about.html", "About",
+         f"{NAME}: founding engineer at Snifr, patented Bluetooth security co-inventor, six years leading software for "
+         f"consumer and medical devices. Bio and resume.",
+         about.replace("<!--RESUME_TEXT-->", resume_text()),
+         [{"@type": "ProfilePage", "url": url("about.html"), "mainEntity": {"@id": PERSON_ID}}])
+    page("portfolio.html", "Portfolio",
+         f"Connected-device case studies by {NAME}: Snifr's Wi-Fi e-nose, patented Bluetooth security at Monovo, "
+         f"medical device software at Nevro, and Myia Health.",
+         portfolio, portfolio_ld())
+    page("contact.html", "Contact",
+         f"Hire {NAME} for your connected-device project. Email, book a free 30-minute intro call, or send a message. "
+         f"Replies within two business days.",
+         contact, [{"@type": "ContactPage", "url": url("contact.html"), "about": {"@id": SERVICE_ID}}])
     build_resume()
-    print("Built:", ", ".join(f for f, _ in PAGES))
+    build_og_image()
+    build_crawler_files()
+    print("Built:", ", ".join(f for f, _ in PAGES), "+ robots.txt, sitemap.xml, llms.txt, og.png")
