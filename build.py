@@ -12,6 +12,8 @@ SITE = Path(__file__).parent / "site"
 SITE_URL = "https://adamure.com"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 TODAY = datetime.date.today().isoformat()
+PATENT_URL = "https://patents.google.com/patent/US12652273B2/en"
+INDEXNOW_KEY = "3f610bffc5a257cae63e0233a09cd9a6"  # public by design: Bing/IndexNow fetches site/<key>.txt to confirm pings come from us
 NAME = "Adam Ure"
 TITLE = "Software Engineer for Connected Devices"
 
@@ -232,8 +234,8 @@ FAQ = [
      "Swift, SwiftUI and UIKit on iOS; Kotlin Multiplatform, Android and Flutter; server-side Swift (Vapor) and Python on AWS; "
      "REST and GraphQL APIs. I work directly with firmware teams across the device and software boundary."),
     ("What makes your Bluetooth work different?",
-     "I co-invented a patented multi-tier Bluetooth security framework for mobile-to-device communication (U.S. Patent No. "
-     "12,652,273), and I test against simulated devices so pairing, reconnect and sync failures show up in CI, not in the field."),
+     f"I co-invented a patented multi-tier Bluetooth security framework for mobile-to-device communication ("
+     f"<a href=\"{PATENT_URL}\" target=\"_blank\" rel=\"noopener noreferrer\">U.S. Patent No. 12,652,273</a>), and I test against simulated devices so pairing, reconnect and sync failures show up in CI, not in the field."),
     ("Where are you based?",
      "The Atlanta metro area in Georgia, USA. I&rsquo;m available for remote freelance work with teams anywhere, and I also "
      "work in Mandarin, including technical specs and communication with manufacturers."),
@@ -355,7 +357,7 @@ PROJECTS = [
          goal="Give patients a remote vitals-monitoring app that connects securely and reliably to at-home devices such as a blood pressure monitor, on both iOS and Android.",
          role="Mobile Experience Architect. I built the iOS app from scratch, set mobile strategy across iOS and Android, co-invented the Bluetooth security framework with the hardware engineers, and later led the backend and web teams too.",
          approach="Designed security into the device link from the start: a multi-tier framework that layers protection on mobile-to-device communication. Established UI patterns, testing practices and engineering standards so both platforms stayed consistent as the product grew.",
-         deliverables="Production iOS app, cross-platform mobile architecture, patented multi-tier Bluetooth security framework (U.S. Patent No. 12,652,273), and end-to-end systems across mobile, backend and web.",
+         deliverables=f"Production iOS app, cross-platform mobile architecture, patented multi-tier Bluetooth security framework (<a href=\"{PATENT_URL}\" target=\"_blank\" rel=\"noopener noreferrer\">U.S. Patent No. 12,652,273</a>), and end-to-end systems across mobile, backend and web.",
          skills=["Bluetooth LE", "Device security", "Mobile architecture", "Team leadership"],
          tools=["Swift", "iOS", "Android", "Backend &amp; web"],
          date="November 2021"),
@@ -571,6 +573,7 @@ h1 b{{color:#15c2a3}} p{{font:500 26px "JetBrains Mono",monospace;color:#8ea6bd;
 
 
 def build_crawler_files():
+    (SITE / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY)
     (SITE / "robots.txt").write_text(f"""# Search engines and AI assistants are welcome to read and cite this site.
 User-agent: *
 Allow: /
@@ -616,7 +619,7 @@ Hardware and IoT teams building mobile apps, backends or platform software that 
 
 ## Education & certifications
 {chr(10).join(f"- {what}, {where}" for where, what, _ in EDUCATION)}
-- Co-inventor, U.S. Patent No. 12,652,273 (multi-tier Bluetooth security framework for mobile-to-device communication)
+- Co-inventor, U.S. Patent No. 12,652,273, "Encrypting data generated from medical devices" (multi-tier Bluetooth security framework for mobile-to-device communication): {PATENT_URL}
 
 ## FAQ
 {faq}

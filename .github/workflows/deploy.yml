@@ -29,3 +29,13 @@ jobs:
           path: site
       - id: deployment
         uses: actions/deploy-pages@v4
+      # Tell Bing (and other IndexNow engines) the pages changed, so they recrawl now instead of eventually.
+      - name: Ping IndexNow
+        continue-on-error: true
+        run: |
+          KEY=$(basename "$(ls site/*.txt | grep -Ev '/(robots|llms)\.txt$')" .txt)
+          URLS=$(grep -o '<loc>[^<]*' site/sitemap.xml | sed 's/<loc>//' | jq -R . | jq -sc .)
+          sleep 30  # give the Pages CDN a moment to serve the new files
+          curl -sS -o /dev/null -w "IndexNow HTTP %{http_code}\n" -X POST https://api.indexnow.org/indexnow \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -d "{\"host\":\"adamure.com\",\"key\":\"$KEY\",\"keyLocation\":\"https://adamure.com/$KEY.txt\",\"urlList\":$URLS}"

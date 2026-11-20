@@ -37,7 +37,7 @@ Hardware and IoT teams building mobile apps, backends or platform software that 
 - M.S. Software Development, Maryville University
 - B.S. Computer Science, Brigham Young University
 - Claude Certified Architect – Foundations, Anthropic
-- Co-inventor, U.S. Patent No. 12,652,273 (multi-tier Bluetooth security framework for mobile-to-device communication)
+- Co-inventor, U.S. Patent No. 12,652,273, "Encrypting data generated from medical devices" (multi-tier Bluetooth security framework for mobile-to-device communication): https://patents.google.com/patent/US12652273B2/en
 
 ## FAQ
 ### What kind of projects do you take on?
