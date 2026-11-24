@@ -17,7 +17,7 @@ INDEXNOW_KEY = "3f610bffc5a257cae63e0233a09cd9a6"  # public by design: Bing/Inde
 NAME = "Adam Ure"
 TITLE = "Software Engineer for Connected Devices"
 
-EMAIL = "adamqure@icloud.com"
+EMAIL = "adam@adamure.com"
 CITY = "Atlanta metro area"
 FORM_ENDPOINT = "https://formspree.io/f/mrpprqoz"
 BOOKING_URL = "https://cal.com/adamure/30min"
@@ -299,7 +299,7 @@ about = f"""    <section class="section">
       <div class="wrap">
         <span class="eyebrow">Resume</span>
         <h2>Experience, education &amp; skills</h2>
-        <a href="resume.pdf" target="_blank"><picture><source srcset="images/resume.webp?v=4" type="image/webp"><img class="resume-img" src="images/resume.png?v=4" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112" loading="lazy"></picture></a>
+        <a href="resume.pdf" target="_blank"><picture><source srcset="images/resume.webp?v=5" type="image/webp"><img class="resume-img" src="images/resume.png?v=5" alt="{NAME} resume: About me, core strengths, experience, education and certifications" width="1632" height="2112" loading="lazy"></picture></a>
         <p class="muted" style="margin-top:1rem"><a href="resume.pdf" target="_blank">Download the resume (PDF)</a></p>
 <!--RESUME_TEXT-->
       </div>
